@@ -32,20 +32,55 @@ public class ParoleController {
     @FXML // fx:id="txtResult"
     private TextArea txtResult; // Value injected by FXMLLoader
     
+    @FXML // fx:id="txtTempi"
+    private TextArea txtTempi; // Value injected by FXMLLoader
+    
     @FXML
     private Button btnReset;
 
     @FXML // fx:id="btnInserisci"
     private Button btnInserisci; // Value injected by FXMLLoader
+    
+    @FXML // fx:id="btnCancella"
+    private Button btnCancella; // Value injected by FXMLLoader
 
     @FXML
     void doInsert(ActionEvent event) {
-    	// TODO
+    	long t1 = System.nanoTime();
+    	String p = txtParola.getText();
+    	elenco.addParola(p);
+    	
+    	txtResult.clear();
+    	
+    	for(String s : elenco.getElenco()) {
+    		txtResult.appendText(s + "\n");
+    	}
+    	long t2 = System.nanoTime();
+    	txtTempi.appendText((t2-t1)/1e6 + " ms\n");
     }
     
     @FXML
     void doReset(ActionEvent event) {
-    	// TODO
+    	long t1 = System.nanoTime();
+    	txtResult.clear();
+    	elenco.reset();
+    	long t2 = System.nanoTime();
+    	txtTempi.appendText((t2-t1)/1e6 + " ms\n");
+    }
+    
+    @FXML
+    void doCancella(ActionEvent event) {
+    	long t1 = System.nanoTime();
+    	String p = txtParola.getText();
+    	if(elenco.cancella(p)) {
+    		txtResult.clear();
+    		for(String s : elenco.getElenco())
+    			txtResult.appendText(s + "\n");
+    	}
+    	else
+    		txtResult.appendText(String.format("La parola %s non è presente nell'elenco di parole\n", p));
+    	long t2 = System.nanoTime();
+    	txtTempi.appendText((t2-t1)/1e6 + " ms\n");
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
